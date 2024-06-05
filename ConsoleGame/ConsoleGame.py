@@ -27,7 +27,7 @@ apples_x = [6, 1, 4, 9]  #Apples coors x
 apples_y = [6, 1, 4, 9]  #Apples coors y
 
 
-"""Console cleaòer"""
+"""Console cleaÑ‚er"""
 def cls():
     os.system(['clear','cls'][os.name == 'nt'])
 
