@@ -4,6 +4,8 @@ import os
 from logging import CRITICAL, getLogger, INFO, basicConfig, StreamHandler, FileHandler, ERROR, DEBUG
 import random
 
+
+"""Logger for debuging"""
 logger = getLogger()
 console = StreamHandler()
 console.setLevel(CRITICAL)
@@ -12,21 +14,24 @@ file_handler.setLevel(DEBUG)
 FORMAT = '%(asctime)s :: %(levelname)-8s :: %(message)s :: %(name)s'
 basicConfig(level=DEBUG, handlers=[file_handler, console], format=FORMAT)
 
+"""Const"""
+game_map = []            #Map matrix
+game_map_size_x = 20     #Sizes of map
+game_map_size_y = 20     #Sizes of map
+matrix_part = []         #Part of new matrix
+pos_x = [2]              #List of snake parts x
+pos_y = [2]              #List of snake parts y
+speed = 0.3              #Time to new frame
+direction = 'Right'      #Snake direction
+apples_x = [6, 1, 4, 9]  #Apples coors x
+apples_y = [6, 1, 4, 9]  #Apples coors y
 
-game_map = []
-game_map_size_x = 10
-game_map_size_y = 10
-matrix_part = []
-pos_x = [2]
-pos_y = [2]
-speed = 0.3
-direction = 'Right'
-apples_x = [6, 1, 4, 9]
-apples_y = [6, 1, 4, 9]
 
+"""Console cleaòer"""
 def cls():
     os.system(['clear','cls'][os.name == 'nt'])
 
+"""Keyboard hook detector"""
 def detect_buttons(e):
     global direction
     if keyboard.is_pressed('up') and direction != 'Down':
@@ -38,6 +43,7 @@ def detect_buttons(e):
     elif keyboard.is_pressed('right') and direction != 'Left':
         direction = 'Right'
 
+"""Map cleaner/creator"""
 def create_map():
     global game_map
     game_map = []
@@ -49,6 +55,7 @@ def create_map():
         matrix_part = []
     logger.info('map created')
 
+"""New frame output from created map + speed timer"""
 def update_screen():
     cls()
     logger.info('Clear')
@@ -61,6 +68,8 @@ def update_screen():
     sleep(speed)
     logger.info('stop sleep')
 
+
+"""Create apple in free space"""
 def random_apple():
     while True:
         apple_x = random.randint(1, game_map_size_x)
@@ -76,9 +85,13 @@ def random_apple():
         else:
             logger.info('apple already exist, creating new')
 
+
+"""Pos changer and frame drawer"""
 def change_pos():
     global pos_x
     global pos_y
+
+    """Add new snake part based on direction from detect_buttons"""
     match direction:
         case 'Up':
             if pos_y[-1] - 1 < 0 or game_map[pos_y[-1] - 1][pos_x[-1]] == '@':
@@ -101,7 +114,10 @@ def change_pos():
             pos_x.append(pos_x[-1] - 1)
             pos_y.append(pos_y[-1])
     logger.info(f'{pos_x}, {pos_y}')
-    create_map()
+
+    create_map() #New map
+
+    """Draw apples and delete poses(x, y), if snake dont eat apple"""
     try:
         for a in range(0, len(apples_x)):
             game_map[apples_y[a]][apples_x[a]] = '0'
@@ -117,6 +133,8 @@ def change_pos():
                     del apples_y[a]
     except IndexError:
         logger.error('List Index out of range!')
+
+    """Draw snake parts based on list with coords"""
     for n in range(0, len(pos_x)):
         try:
             game_map[pos_y[n]][pos_x[n]] = '@'
@@ -126,13 +144,14 @@ def change_pos():
     logger.info(f'{pos_x}, {pos_y}')
     logger.info(f'{apples_x}, {apples_y}')
 
+"""main loop"""
 def loop():
     logger.info('Loop Started!')
     while True:
         change_pos()
         update_screen()
         
-
+"""App starter"""
 if __name__ == '__main__':
     logger.info('Started')
     create_map()
