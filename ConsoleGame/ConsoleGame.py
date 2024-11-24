@@ -61,7 +61,15 @@ def update_screen():
     logger.info('Clear')
     for n in game_map:
         for m in n:
-            print(f'{m} ', end='')
+            #Coloring Frames
+            if m == '@':
+                print(f'\033[1;32;40m{m} ', end='')
+            elif m == '0':
+                print(f'\u001b[31;1m{m} ', end='')
+            elif m == '#':
+                print(f'\u001b[30;1m{m} ', end='')
+            else:
+                print(f'\u001b[0m{m} ', end='')
         print('')
     print(' ')
     logger.info('start sleep')
