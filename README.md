@@ -8,6 +8,10 @@ Console ASCII visual snake script in python, nothing extra
 To play run ConsoleGame.py you need Python newer than 3.6
 ```
 git clone --recurse-submodules https://github.com/Pasha4oo/SnakeGame
+```
+```
 pip install keyboard
+```
+```
 python ConsoleGame.py
 ```
